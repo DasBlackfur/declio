@@ -459,7 +459,7 @@ where
     }
 }
 
-impl<'a, T, Ctx> Encode<Ctx> for Cow<'a, T>
+impl<T, Ctx> Encode<Ctx> for Cow<'_, T>
 where
     T: Encode<Ctx> + ToOwned + ?Sized,
 {
@@ -468,11 +468,11 @@ where
     where
         W: io::Write,
     {
-        T::encode(&*self, inner_ctx, writer)
+        T::encode(self, inner_ctx, writer)
     }
 }
 
-impl<'a, T, Ctx> Decode<Ctx> for Cow<'a, T>
+impl<T, Ctx> Decode<Ctx> for Cow<'_, T>
 where
     T: ToOwned + ?Sized,
     T::Owned: Decode<Ctx>,
@@ -495,7 +495,7 @@ where
     where
         W: io::Write,
     {
-        T::encode(&*self, inner_ctx, writer)
+        T::encode(self, inner_ctx, writer)
     }
 }
 

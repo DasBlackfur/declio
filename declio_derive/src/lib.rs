@@ -1,3 +1,4 @@
+use darling::ast::NestedMeta;
 use darling::{ast, Error, FromDeriveInput, FromField, FromMeta, FromVariant};
 use proc_macro2::TokenStream;
 use quote::{format_ident, quote, ToTokens};
@@ -739,13 +740,13 @@ where
     fn from_meta(item: &syn::Meta) -> Result<Self, Error> {
         match item {
             syn::Meta::List(value) => {
-                Self::from_list(&value.nested.iter().cloned().collect::<Vec<_>>())
+                Self::from_list(&NestedMeta::parse_meta_list(value.tokens.clone())?)
             }
             _ => T::from_meta(item).map(Self::Single),
         }
     }
 
-    fn from_list(items: &[syn::NestedMeta]) -> Result<Self, Error> {
+    fn from_list(items: &[NestedMeta]) -> Result<Self, Error> {
         let mut encode = None;
         let mut decode = None;
 
@@ -754,7 +755,7 @@ where
 
         for item in items {
             match item {
-                syn::NestedMeta::Meta(meta) => match meta.path() {
+                NestedMeta::Meta(meta) => match meta.path() {
                     path if *path == encode_path => {
                         if encode.is_none() {
                             encode = Some(T::from_meta(meta)?);
@@ -771,7 +772,7 @@ where
                     }
                     other => return Err(Error::unknown_field_path(other)),
                 },
-                syn::NestedMeta::Lit(..) => return Err(Error::unsupported_format("literal")),
+                NestedMeta::Lit(..) => return Err(Error::unsupported_format("literal")),
             }
         }
         Ok(Self::Multi { encode, decode })
