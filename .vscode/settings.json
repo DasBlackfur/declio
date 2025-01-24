@@ -3,6 +3,7 @@
         "Asym",
         "bidir",
         "declio",
-        "deku"
+        "deku",
+        "tokio"
     ]
 }

@@ -11,8 +11,10 @@ keywords = ["binary", "io", "declarative", "bidirectional"]
 categories = ["encoding", "parsing"]
 
 [features]
-default = ["derive"]
+default = ["derive", "async"]
 derive = ["declio_derive"]
+async = ["declio_derive/async", "dep:tokio"]
 
 [dependencies]
 declio_derive = { path = "../declio_derive", version = "0.3", optional = true }
+tokio = { version = "1", default-features = false, features = ["io-util", "net"], optional = true }

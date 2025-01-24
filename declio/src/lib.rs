@@ -135,6 +135,10 @@
 
 #![warn(missing_docs)]
 
+#[cfg(feature = "async")]
+/// Implements async support.
+pub mod async_rt;
+
 mod error;
 mod macros;
 

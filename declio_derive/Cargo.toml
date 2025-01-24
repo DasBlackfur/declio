@@ -9,6 +9,9 @@ license = "MIT"
 keywords = ["binary", "io", "declarative", "bidirectional"]
 categories = ["encoding", "parsing"]
 
+[features]
+async = []
+
 [lib]
 proc-macro = true
 
